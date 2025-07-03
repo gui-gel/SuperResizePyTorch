@@ -1,0 +1,162 @@
+===============================================================================
+                        SUPERRESIZE PYTORCH - DOCUMENTAZIONE
+===============================================================================
+
+DESCRIZIONE
+-----------
+SuperResizePyTorch è un'applicazione avanzata di super-resolution che utilizza 
+PyTorch e CUDA per ingrandire immagini mantenendo alta qualità. Il programma 
+sfrutta l'accelerazione GPU NVIDIA per elaborazioni veloci e utilizza i migliori 
+modelli Real-ESRGAN disponibili.
+
+CARATTERISTICHE PRINCIPALI
+--------------------------
+• Accelerazione GPU CUDA per elaborazione veloce
+• Supporto modelli Real-ESRGAN di alta qualità
+• Modalità specializzata per volti e ritratti
+• Processamento batch con wildcard
+• Fattori di scala multipli (2x, 3x, 4x, 8x)
+• Download automatico modelli con cache locale
+• Gestione errori robusta
+
+COME FUNZIONA
+-------------
+1. RILEVAMENTO HARDWARE: Identifica automaticamente la GPU NVIDIA disponibile
+2. DOWNLOAD MODELLI: Scarica i modelli Real-ESRGAN necessari (solo al primo uso)
+3. PREPROCESSING: Converte le immagini in tensori PyTorch ottimizzati
+4. ELABORAZIONE GPU: Applica algoritmi di super-resolution accelerati CUDA
+5. POSTPROCESSING: Converte i risultati in formato immagine standard
+6. SALVATAGGIO: Genera file di output con nomi descrittivi
+
+ALGORITMI UTILIZZATI
+--------------------
+• INTERPOLAZIONE BICUBICA: Per fattori di scala ≤2x (veloce e precisa)
+• INTERPOLAZIONE MULTI-STEP: Per fattori >2x (qualità ottimale)
+• REAL-ESRGAN: Modelli neurali pre-addestrati per qualità superiore
+• FACE-OPTIMIZED: Modelli specializzati per ritratti e volti
+
+REQUISITI SISTEMA
+-----------------
+• Python 3.7+
+• GPU NVIDIA con supporto CUDA
+• Driver NVIDIA aggiornati
+• PyTorch con supporto CUDA
+• OpenCV
+• NumPy
+
+DIPENDENZE
+----------
+pip install torch torchvision opencv-python numpy
+
+SINTASSI
+--------
+python SuperResizePyTorch.py <input> [--x <fattore>] [--face]
+
+PARAMETRI
+---------
+<input>         File singolo o pattern wildcard (*.jpg, img*.png, etc.)
+--x <fattore>   Fattore di ingrandimento: 2, 3, 4, 8 (default: 2)
+--face          Modalità ottimizzata per volti e ritratti
+
+ESEMPI DI UTILIZZO
+------------------
+
+1. SINGOLO FILE - MODALITÀ BASE
+   python SuperResizePyTorch.py foto.jpg
+   → Genera: foto_PyTorch_x2.jpg
+
+2. SINGOLO FILE - FATTORE PERSONALIZZATO
+   python SuperResizePyTorch.py immagine.png --x 4
+   → Genera: immagine_PyTorch_x4.png
+
+3. MODALITÀ RITRATTI
+   python SuperResizePyTorch.py ritratto.jpg --x 2 --face
+   → Genera: ritratto_PyTorch_x2_face.jpg
+
+4. BATCH PROCESSING - TUTTI I JPG
+   python SuperResizePyTorch.py "*.jpg" --x 4
+   → Elabora tutti i file .jpg nella cartella
+
+5. BATCH CON PATTERN SPECIFICO
+   python SuperResizePyTorch.py "img*.png" --x 2 --face
+   → Elabora tutti i PNG che iniziano con "img"
+
+6. CARTELLA SPECIFICA
+   python SuperResizePyTorch.py "./photos/*.jpg" --x 8
+   → Elabora tutti i JPG nella cartella photos
+
+7. COMBINAZIONE AVANZATA
+   python SuperResizePyTorch.py "./portraits/*.png" --x 4 --face
+   → Ritratti con fattore 4x e modalità face
+
+MODELLI UTILIZZATI
+------------------
+
+MODALITÀ GENERALE (Default):
+• RealESRGAN_x2plus.pth - Per fattore 2x (22MB)
+• RealESRGAN_x4plus.pth - Per fattore 4x (64MB)
+
+MODALITÀ FACE (--face):
+• RealESRGAN_x2plus_face.pth - Per ritratti 2x (22MB)
+• RealESRGAN_x4plus_face.pth - Per ritratti 4x (64MB)
+
+NOTA: I modelli vengono scaricati automaticamente da GitHub alla prima 
+esecuzione e salvati in ./models/ per riutilizzo futuro.
+
+OUTPUT
+------
+I file elaborati vengono salvati con il seguente schema:
+• Modalità generale: [nome]_PyTorch_x[fattore].[ext]
+• Modalità face: [nome]_PyTorch_x[fattore]_face.[ext]
+
+Esempi:
+• foto.jpg → foto_PyTorch_x2.jpg
+• ritratto.png → ritratto_PyTorch_x4_face.png
+
+PERFORMANCE
+-----------
+• GPU NVIDIA GTX 1050 Ti (4GB): ~2-5 secondi per immagine 1920x1080
+• Fattori alti (4x, 8x) richiedono più memoria GPU
+• Il batch processing è ottimizzato per elaborazioni multiple
+
+RISOLUZIONE PROBLEMI
+--------------------
+
+ERRORE: "CUDA not available"
+→ Verifica driver NVIDIA e installazione PyTorch con CUDA
+
+ERRORE: "Out of memory"
+→ Riduci dimensione immagine o usa fattore di scala minore
+
+ERRORE: "Module not found"
+→ Installa dipendenze: pip install torch opencv-python numpy
+
+DOWNLOAD LENTO/FALLITO
+→ Controlla connessione internet e riprova
+
+LIMITAZIONI
+-----------
+• Richiede GPU NVIDIA con supporto CUDA
+• Memoria GPU limitata per immagini molto grandi
+• Modelli face ottimizzati solo per fattori 2x e 4x
+• Prima esecuzione richiede download modelli (~100MB totali)
+
+VANTAGGI RISPETTO AD ALTRI METODI
+---------------------------------
+• Qualità superiore rispetto a interpolazione classica
+• Velocità elevata grazie accelerazione GPU
+• Modelli specializzati per diversi tipi di contenuto
+• Gestione automatica dei modelli e cache
+• Supporto batch processing efficiente
+
+CREDITS
+-------
+• Real-ESRGAN: https://github.com/xinntao/Real-ESRGAN
+• PyTorch: https://pytorch.org
+• OpenCV: https://opencv.org
+
+VERSIONE
+--------
+SuperResizePyTorch v1.0 - Luglio 2025
+
+===============================================================================
